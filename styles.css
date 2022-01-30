@@ -1,4 +1,24 @@
-/* Sets all the text color to red! */
-body {
-    color: red;
+.theme-dark {
+    /* Changed from 8% because unchecked checkboxes were too hard to see. */
+    --background-modifier-border-hover: hsl(var(--base-h), var(--base-s), calc(var(--base-d) + 18%));
+}
+
+/* Checkbox state for "currently working on". */
+input.task-list-item-checkbox[data-task="o"],
+li[data-task="o"] > .task-list-item-checkbox,
+li[data-task="o"] > p > .task-list-item-checkbox {
+    border-color: hsl(0, calc(var(--accent-s) - 5%), var(--accent-l)) !important;
+    background-color: hsl(0, calc(var(--accent-s) - 5%), var(--accent-l)) !important;
+    background-size: auto !important;
+    background-image: url('data:image/svg+xml,<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="8" r="3" fill="%23ffffff"/></svg>') !important;
+}
+
+/* Checkbox state for "not going to do". */
+input.task-list-item-checkbox[data-task="-"],
+li[data-task="-"] > .task-list-item-checkbox,
+li[data-task="-"] > p > .task-list-item-checkbox {
+    border-color: hsl(0, 0%, var(--accent-l)) !important;
+    background-color: hsl(0, 0%, var(--accent-l)) !important;
+    background-size: auto !important;
+    background-image: url('data:image/svg+xml,<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="7" width="10" height="2" fill="%23ffffff"/></svg>') !important;
 }
