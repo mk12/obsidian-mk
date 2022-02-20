@@ -5,7 +5,6 @@ Targets:
 endef
 
 repo_path := $(shell pwd)
-repo_name := $(notdir $(repo_path))
 
 .PHONY: all help install
 
@@ -19,7 +18,7 @@ install: | main.js
 ifeq (,$(OBSIDIAN_VAULT))
 	$(error OBSIDIAN_VAULT is not set)
 else
-	ln -sf $(repo_path) "$(OBSIDIAN_VAULT)/.obsidian/plugins/$(repo_name)"
+	ln -sf $(repo_path) "$(OBSIDIAN_VAULT)/.obsidian/plugins/"
 endif
 
 main.js: package.json esbuild.config.mjs $(wildcard src/*.ts)

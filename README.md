@@ -13,10 +13,9 @@ It assumes the [obsidian-minimal] theme is being used.
 
 ## Contributing
 
-1. `asdf install` if you have [asdf].
-2. `npm install` to get dependencies.
-3. `npm run dev` while developing.
-4. `npm run build` when finished.n
+1. `npm install` to get dependencies.
+2. `npm run dev` while developing.
+3. `npm run build` when finished.
 
 ## License
 
@@ -29,5 +28,4 @@ Thanks to Tim Hor for code copied from [obsidian-editor-shortcuts].
 [Obsidian]: https://obsidian.md
 [obsidian-sample-plugin]: https://github.com/obsidianmd/obsidian-sample-plugin
 [obsidian-minimal]: https://github.com/kepano/obsidian-minimal
-[asdf]: http://asdf-vm.com
 [obsidian-editor-shortcuts]: https://github.com/timhor/obsidian-editor-shortcuts
