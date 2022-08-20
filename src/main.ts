@@ -8,6 +8,7 @@ import {
   deleteSelectedLines,
   joinLines,
   selectLine,
+  sortChecklist,
 } from "./actions";
 
 export default class MyPlugin extends Plugin {
@@ -95,5 +96,11 @@ export default class MyPlugin extends Plugin {
       ],
       editorCallback: (editor) => cycleChecklistStatus(editor),
     });
+
+    this.addCommand({
+      id: "sortChecklist",
+      name: "Sort checklist",
+      editorCallback: (editor) => sortChecklist(editor),
+    })
   }
 }

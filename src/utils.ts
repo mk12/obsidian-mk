@@ -24,3 +24,7 @@ export function getSelectionBoundaries(selection: EditorSelection) {
   }
   return { from, to };
 }
+
+export function getFullLine(line: number, editor: Editor): string {
+  return editor.getRange(getLineStartPos(line), getLineEndPos(line, editor));
+}

@@ -2,6 +2,7 @@
 
 import { Editor } from "obsidian";
 import {
+  getFullLine,
   getLineEndPos,
   getLineStartPos,
   getSelectionBoundaries,
@@ -88,9 +89,7 @@ export function cycleChecklistStatus(editor: Editor) {
   if (from.line !== to.line) {
     return;
   }
-  const fromLineStart = getLineStartPos(from.line);
-  const fromLineEnd = getLineEndPos(from.line, editor);
-  const contentsOfLine = editor.getRange(fromLineStart, fromLineEnd);
+  const contentsOfLine = getFullLine(from.line, editor);
   const match = /^(\s*- \[)(.)\] /.exec(contentsOfLine);
   if (!match) {
     return;
@@ -104,9 +103,57 @@ export function cycleChecklistStatus(editor: Editor) {
   } else {
     newSymbol = symbols[(index + 1) % symbols.length];
   }
+  const fromLineStart = getLineStartPos(from.line);
   const untilSymbol = {
     line: from.line,
     ch: fromLineStart.ch + match[0].length - 2,
   };
   editor.replaceRange(`${match[1]}${newSymbol}`, fromLineStart, untilSymbol);
+}
+
+export function sortChecklist(editor: Editor) {
+  const selections = editor.listSelections();
+  if (selections.length === 0) {
+    return;
+  }
+  const { from, to } = getSelectionBoundaries(selections[0]);
+  if (from.line !== to.line) {
+    return;
+  }
+  let first = from.line;
+  let last = from.line;
+  const lines = [getFullLine(first, editor)];
+  const checklistItem = /^\s*- \[(.)\] /;
+  while (first > 0) {
+    const line = getFullLine(first - 1, editor);
+    if (!checklistItem.test(line)) {
+      break;
+    }
+    lines.unshift(line);
+    first--;
+  }
+  while (last < editor.lineCount() - 1) {
+    const line = getFullLine(last + 1, editor);
+    if (!checklistItem.test(line)) {
+      break;
+    }
+    lines.push(line);
+    last++;
+  }
+  if (first === last) {
+    return;
+  }
+  const symbolValue = (line: string) =>
+    ["o", " ", "x", "-"].indexOf(checklistItem.exec(line)[1]);
+  const cmp = <T extends string | number>(lhs: T, rhs: T) =>
+    lhs < rhs ? -1 : lhs > rhs ? 1 : 0;
+  lines.sort(
+    (lhs, rhs) => cmp(symbolValue(lhs), symbolValue(rhs)) || cmp(lhs, rhs),
+  );
+  editor.replaceRange(
+    lines.join("\n"),
+    getLineStartPos(first),
+    getLineEndPos(last, editor),
+  );
+  editor.setCursor(getLineEndPos(first, editor));
 }
