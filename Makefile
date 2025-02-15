@@ -1,12 +1,16 @@
 define usage
 Targets:
 	help     Show this help message
-	install  Symlink the plugin into Obsidian vault
+	install  Install in DESTDIR (default: $(default_destdir))
 endef
 
-repo_path := $(shell pwd)
-
 .PHONY: all help install
+
+default_destdir := $(HOME)/Notes/.obsidian/plugins/$(notdir $(CURDIR))
+
+DESTDIR ?= $(default_destdir)
+src_files := manifest.json main.js styles.css
+files := $(src_files:%=$(DESTDIR)/%)
 
 all: main.js
 
@@ -14,12 +18,13 @@ help:
 	$(info $(usage))
 	@:
 
-install: | main.js
-ifeq (,$(OBSIDIAN_VAULT))
-	$(error OBSIDIAN_VAULT is not set)
-else
-	ln -sf $(repo_path) "$(OBSIDIAN_VAULT)/.obsidian/plugins/"
-endif
-
 main.js: package.json esbuild.config.mjs $(wildcard src/*.ts)
 	npm run build
+
+install: $(files)
+
+$(files): $(DESTDIR)/%: % | $(DESTDIR)
+	cp $< $@
+
+$(DESTDIR):
+	mkdir -p $@
