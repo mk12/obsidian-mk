@@ -1,6 +1,7 @@
 /* Make headings smaller */
 body {
     --inline-title-size: 1.5em; /* default: var(--h1-size) */
+    --inline-title-margin-bottom: 1em/* default: 0.5em */;
     --h1-size: 1.3em; /* default: 2em; */
     --h2-size: 1.12em /* default: 1.6em */;
     --h3-size: 1em /* default: 1.37em */;
